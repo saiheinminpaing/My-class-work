@@ -1,0 +1,46 @@
+# My-class-work
+#include "stdio.h"
+int charCount(char arr[50]);
+int rightGmail(char first[50],char second[10],int x);
+
+
+int main(){
+    char correct[10]={'@','g','m','a','i','l','.','c','o','m'};
+    char usermail[50];
+    printf("Enter your gmail:\n");
+    scanf("%[^\n]",&usermail);
+    int numofchar = charCount(usermail);
+    int confirm = rightGmail(usermail,correct,numofchar);
+    printf("%d\n",confirm);
+    if (confirm==10){
+        printf("Gmail confirm.\n");
+    }else{
+        printf("Invalid gmail.\n");
+    }
+    return 0;
+};
+
+
+int charCount(char arr[50]){
+    int count = 0;
+    for (int i;i<50;i++){
+        if (arr[i]=='\0'){
+            break;
+        }else{
+            count++;
+        }
+    }
+    return count;
+}
+
+int rightGmail(char first[50],char second[10],int x){
+    int same=0;
+    while(same<10){
+        if(first[x+same-10]==second[same]){
+            same++;
+        }else{
+            break;
+        }
+    }
+    return same;
+};
