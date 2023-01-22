@@ -1,0 +1,171 @@
+# My-class-work#include "stdio.h"
+#include "stdlib.h"
+#define MAX 10000
+struct User{
+    char gmail[50];
+    char password[30];
+    //char name[30];
+    //int phonenumber;
+    //int birthDay;
+    //int birthMonth;
+    //int birthYear;
+};
+struct User data[MAX];
+int maxnumfile=0;
+int charCount(char arr[50]);
+void tempfile();
+void userdata();
+void printalldata();
+
+void mainoption();
+
+void loginSetting();
+
+void signupSetting();
+void signupgmail();
+void existgmail();
+int rightGmail(char first[50],int x);
+int gmailexist(char mail[50],int numofchar);
+
+int main(){
+    //tempfile();
+    userdata();
+    printalldata();
+    mainoption();
+    return 0;
+}
+
+void userdata(){
+    FILE * fptr = fopen("temp.txt", "r");
+    if(fptr==NULL){
+        printf("File not found.\n");
+    }else{
+        for (int i=0; i<MAX; i++){
+            fscanf(fptr ,"%s%s",data[i].gmail,data[i].password);//,data[i].name,data[i].phonenumber,data[i].birthDay,data[i].birthMonth,data[i].birthYear);
+            if (data[i].gmail[0]=='\0'){
+                break;
+            }
+            maxnumfile++;
+        }
+    }
+    fclose(fptr);
+}
+
+void printalldata(){
+    for(int i=0;i<maxnumfile;i++){
+        printf("gmail:%s password:%s\n",data[i].gmail,data[i].password);//,data[i].name,data[i].phonenumber,data[i].birthDay,data[i].birthMonth,data[i].birthYear);
+    }
+}
+
+void mainoption(){
+    int option=0;
+    printf("Well come too gmail account setting.\n");
+    printf("Press 1 to login account:\n");
+    printf("Press 2 to sign up account:\n");
+    printf("Press 3 to exist:\n");
+    scanf("%d",&option);
+    if(option==1){
+        loginSetting();
+    }else if(option==2){
+        signupSetting();
+    }else if(option==3){
+        exit(0);
+    }else{
+        printf("Invalid option!Chose again.\n");
+        mainoption();
+    }
+}
+
+void tempfile(){
+    FILE * fptr = fopen("temp.txt","w");
+    fclose(fptr);
+}
+
+void loginSetting(){
+    char usermail[50];
+    printf("This is login setting.\n");
+    printf("Enter your gmail:\n");
+    scanf(" %[^\n]",&usermail);
+}
+
+int charCount(char arr[50]){
+    int count = 0;
+    for (int i;i<50;i++){
+        if (arr[i]=='\0'){
+            break;
+        }else{
+            count++;
+        }
+    }
+    return count;
+}
+
+int rightGmail(char first[50],int x){
+    char correct[10]={'@','g','m','a','i','l','.','c','o','m'};
+    int same=0;
+    while(same<10){
+        if(first[x+same-10]==correct[same]){
+            same++;
+        }else{
+            break;
+        }
+    }
+    return same;
+};
+
+void signupSetting(){
+    printf("This is sign up setting.\n");
+    signupgmail();
+}
+
+void signupgmail(){
+    char entermail[50];
+    printf("Enter name of gmail:\n");
+    scanf(" %[^\n]",&entermail);
+    int num = charCount(entermail);
+    int index = rightGmail(entermail,num);
+    if(index==10){
+        printf("confirm!\n");
+        int gmailfound = gmailexist(entermail,num);
+        if(gmailfound==num){
+            existgmail();
+        }else{
+            printf("Your gmail has been confirm.\n");
+        }
+    }else{
+        printf("Invalid gmail enter again.\n");
+        signupSetting();
+    }
+}
+
+int gmailexist(char mail[50],int numofchar){
+    int same=0;
+    for(int i=0;i<maxnumfile;i++){
+        int datanum= charCount(data[i].gmail);
+        if(numofchar==datanum){
+            for (int j = 0; j < datanum; ++j) {
+                if(mail[j]==data[i].gmail[j]){
+                    same++;
+                }
+            }
+        }
+    }
+    return same;
+}
+
+void existgmail(){
+    int opt=0;
+    while (true){
+        printf("Your gmail is already exist.\n");
+        printf("Press 1 to resign up gmail:\n");
+        printf("Press 2 to go to main account setting;\n");
+        scanf("%d",&opt);
+        if(opt==1){
+            signupSetting();
+        }else if(opt==2){
+            mainoption();
+        }else{
+            printf("Invalid option!Chose again.\n");
+        }
+    }
+}
